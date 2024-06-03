@@ -109,7 +109,9 @@
             </div>
           </li>
         </ul>
-        {{ this.data }}
+        <!-- {{ this.data }} -->
+        {{ this.phoneState }}
+        {{ this.brightness }}
       </div>
     </div>
   </section>
@@ -153,6 +155,7 @@ export default {
           const phoneInternals = result.Internals;
           const state = phoneInternals.STATE;
           console.log("STATE: " + state);
+          this.phoneState = state;
         }
       });
     }
