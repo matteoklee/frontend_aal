@@ -59,7 +59,7 @@
                   Wird ein Smartphone im Netzwerk erkannt?
                 </p>
               </div>
-              <span v-if="phoneState === 'present'" class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+              <span v-if="phone === 'present'" class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
 								<span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
 								Aktiviert
 							</span>
@@ -110,8 +110,6 @@
           </li>
         </ul>
         <!-- {{ this.data }} -->
-        {{ this.phoneState }}
-        {{ this.brightness }}
       </div>
     </div>
   </section>
@@ -124,8 +122,10 @@ export default {
   data() {
     return {
       data: [],
-      phoneState: null,
+      phone: null,
       brightness: null,
+      power: null,
+      led: null,
     }
   },
   mounted() {
@@ -144,18 +144,48 @@ export default {
     },
     extractValues(data) {
       //Handy -> Internals
-      //MQTT2_DVES_DF3CFC -> Readings -> state -> Value
+      //MQTT2_DVES_DF3CFC (led stripes) -> Readings -> state -> Value
       //Helligkeitssenor -> Readings -> brightness -> Value (Lux)
       //HM_2C112D (Strom) ->
       //HM_2C112D_Pwr -> Readings -> power -> Value
+      const phoneName = "Handy";
+      const ledName = "MQTT2_DVES_DF3CFC";
+      const brightnessName = "HelligkeitSensor";
+      const powerName = "HM_2C112D_Pwr";
 
       const results = data.Results;
-      const phone = results.forEach(result => {
-        if(result.Name === "Handy") {
-          const phoneInternals = result.Internals;
-          const state = phoneInternals.STATE;
-          console.log("STATE: " + state);
-          this.phoneState = state;
+      results.forEach(result => {
+        const name = result.Name;
+        const internals = result.Internals;
+        const readings = result.Readings;
+
+        switch (name) {
+          case phoneName:
+            const phoneState = internals.STATE;
+            if(phoneState !== null) {
+              this.phone = phoneState;
+            }
+            break;
+          case ledName:
+            const ledState = readings.state;
+            if(ledState !== null) {
+              this.led = ledState;
+            }
+            break;
+          case brightnessName:
+            const brightnessValue = readings.brightness;
+            if(brightnessValue !== null) {
+              this.brightness = brightnessValue;
+            }
+            break;
+          case powerName:
+            const powerValue = readings.power;
+            if(powerValue !== null) {
+              this.power = powerValue;
+            }
+            break;
+          default:
+            break;
         }
       });
     }
