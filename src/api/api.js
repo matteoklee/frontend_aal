@@ -4,7 +4,7 @@ const BASE_URL = '/api/fhem';
 const fetchData = async () => {
     try {
         //TODO: https://wiki.fhem.de/wiki/CsrfToken-HowTo
-        const response = await fetch(`${BASE_URL}?fw_id=1717437600.69312&fwcsrf=csrf_211079456867366&cmd=jsonlist&XHR=1`, {
+        const response = await fetch(`${BASE_URL}?cmd=jsonlist&XHR=1`, {
             //mode: 'no-cors',
             method: "get",
             headers: {

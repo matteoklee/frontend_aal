@@ -96,7 +96,7 @@
               </div>
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-semibold text-gray-900 truncate dark:text-white">
-                  CO2-Verbrauch
+                  CO2-Ausstoß
                 </p>
                 <p class="text-sm text-gray-500 truncate dark:text-gray-400">
                   Wie viel CO2 wird bei der Verwendung der LED's verbraucht?
@@ -111,8 +111,8 @@
         </ul>
         <!-- {{ this.data }} -->
         {{ this.phone }}
-        {{ this.brightness }}
-        {{ this.power }}
+        {{ this.brightness }} <!-- in Lux -->
+        {{ this.power }} <!-- W -->
         {{ this.led }}
 
       </div>
@@ -139,6 +139,9 @@ export default {
     this.interval = setInterval(() => {
       this.getData();
     }, 10000);
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
   },
   methods: {
     async getData() {
