@@ -110,6 +110,11 @@
           </li>
         </ul>
         <!-- {{ this.data }} -->
+        {{ this.phone }}
+        {{ this.brightness }}
+        {{ this.power }}
+        {{ this.led }}
+
       </div>
     </div>
   </section>
@@ -130,6 +135,10 @@ export default {
   },
   mounted() {
     this.getData();
+
+    this.interval = setInterval(() => {
+      this.getData();
+    }, 10000);
   },
   methods: {
     async getData() {
@@ -167,22 +176,32 @@ export default {
             }
             break;
           case ledName:
-            const ledState = readings.state;
-            if(ledState !== null) {
-              this.led = ledState;
+            const ledStateGeneral = readings.state;
+            if(ledStateGeneral !== null) {
+              const ledState = ledStateGeneral.Value;
+              if(ledState !== null) {
+                this.led = ledState;
+              }
             }
             break;
           case brightnessName:
-            const brightnessValue = readings.brightness;
-            if(brightnessValue !== null) {
-              this.brightness = brightnessValue;
+            const brightnessValueGeneral = readings.brightness;
+            if(brightnessValueGeneral !== null) {
+              const brightnessValue = brightnessValueGeneral.Value;
+              if(brightnessValue !== null) {
+                this.brightness = brightnessValue;
+              }
             }
             break;
           case powerName:
-            const powerValue = readings.power;
-            if(powerValue !== null) {
-              this.power = powerValue;
+            const powerValueGeneral = readings.power;
+            if(powerValueGeneral !== null) {
+              const powerValue = powerValueGeneral.Value;
+              if(powerValue !== null) {
+                this.power = powerValue;
+              }
             }
+
             break;
           default:
             break;
