@@ -10,8 +10,9 @@
         <ul role="list" class="max-w-lg divide-y divide-gray-200 mx-auto">
           <li class="py-3 sm:py-4">
             <div class="flex items-center space-x-3 rtl:space-x-reverse">
-              <div class="flex-shrink-0">
-                <i class="fa fa-lightbulb-o fa-lg"></i>
+              <div class="flex-shrink-0 text-red-500">
+                  <i class="fas fa-lightbulb-o fa-lg"></i>
+                  <font-awesome-icon :icon="['fas', 'lightbulb']" />
               </div>
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-semibold text-gray-900 truncate dark:text-white">
@@ -21,9 +22,13 @@
                   Ist die Beleuchtung aktuell eingeschalten?
                 </p>
               </div>
-              <span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+              <span v-if="this.led !== null && this.led !== ''" class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
 								<span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
 								Aktiviert
+							</span>
+              <span v-else class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+								<span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+								Deaktiviert
 							</span>
             </div>
           </li>
@@ -34,15 +39,19 @@
               </div>
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-semibold text-gray-900 truncate dark:text-white">
-                  Zeit
+                  Helligkeit
                 </p>
                 <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                  Ist die Beleuchtung bei aktueller Tageszeit aktiviert?
+                  Welche Helligkeit wird aktuell gemessen?
                 </p>
               </div>
+              <span v-if="brightness !== null && brightness !== ''" class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+								<span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+								{{ this.brightness }} lx
+							</span>
               <span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
 								<span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
-								Deaktiviert
+								-
 							</span>
             </div>
           </li>
@@ -79,12 +88,16 @@
                   Stromverbrauch
                 </p>
                 <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                  Wie viel verbrauchen die LED's aktuell?
+                  Wie viel Strom verbrauchen die LED's aktuell?
                 </p>
               </div>
-              <span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+              <span v-if="power !== null && power !== '' && power !== undefined" class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
 								<span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-								~ 5 W
+								{{ this.power }} W
+							</span>
+              <span v-else class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+								<span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+								-
 							</span>
             </div>
           </li>
@@ -99,12 +112,16 @@
                   CO2-Ausstoß
                 </p>
                 <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                  Wie viel CO2 wird bei der Verwendung der LED's verbraucht?
+                  Wie viel CO2 wird bei der Verwendung der LED's ausgestoßen?
                 </p>
               </div>
-              <span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+              <span v-if="emission !== null && emission !== '' && emission !== undefined" class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
 								<span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-								0,00042 kg
+								 {{ this.emission }} g/kwH
+							</span>
+              <span v-else class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+								<span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+								 -
 							</span>
             </div>
           </li>
@@ -129,8 +146,9 @@ export default {
       data: [],
       phone: null,
       brightness: null,
-      power: null,
+      power: 5,
       led: null,
+      emission: null,
     }
   },
   mounted() {
@@ -150,6 +168,7 @@ export default {
         console.log(fetchedData);
         this.data = fetchedData;
         this.extractValues(fetchedData);
+        this.calculateEmission();
       } catch (error) {
         console.error(error);
       }
@@ -204,12 +223,17 @@ export default {
                 this.power = powerValue;
               }
             }
-
             break;
           default:
             break;
         }
       });
+    },
+    calculateEmission() {
+      if(this.power && this.power !== null) {
+        const powerInKwh = this.power * 0.001;
+        this.emission = powerInKwh * 420;
+      }
     }
   }
 }
