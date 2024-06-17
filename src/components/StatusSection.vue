@@ -16,7 +16,7 @@
               </div>
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-semibold text-gray-900 truncate dark:text-white">
-                  Beleuchtung
+                  Beleuchtung/ LED's
                 </p>
                 <p class="text-sm text-gray-500 truncate dark:text-gray-400">
                   Ist die Beleuchtung aktuell eingeschalten?
@@ -49,7 +49,7 @@
 								<span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
 								{{ this.brightness }} lx
 							</span>
-              <span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+              <span v-else class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
 								<span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
 								-
 							</span>
@@ -131,7 +131,7 @@
         {{ this.brightness }} <!-- in Lux -->
         {{ this.power }} <!-- W -->
         {{ this.led }}
-
+        {{ this.emission }} <!-- g/kwH -->
       </div>
     </div>
   </section>
@@ -146,7 +146,7 @@ export default {
       data: [],
       phone: null,
       brightness: null,
-      power: 5,
+      power: null,
       led: null,
       emission: null,
     }
