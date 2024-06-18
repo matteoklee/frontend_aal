@@ -22,7 +22,7 @@
                   Ist die Beleuchtung aktuell eingeschalten?
                 </p>
               </div>
-              <span v-if="this.led !== null && this.led !== ''" class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+              <span v-if="this.led !== null && this.led !== 'off'" class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
 								<span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
 								Aktiviert
 							</span>
@@ -126,12 +126,7 @@
             </div>
           </li>
         </ul>
-        <!-- {{ this.data }} -->
-        {{ this.phone }}
-        {{ this.brightness }} <!-- in Lux -->
-        {{ this.power }} <!-- W -->
-        {{ this.led }}
-        {{ this.emission }} <!-- g/kwH -->
+
       </div>
     </div>
   </section>
@@ -233,6 +228,7 @@ export default {
       if(this.power && this.power !== null) {
         const powerInKwh = this.power * 0.001;
         this.emission = powerInKwh * 420;
+        this.emission = this.emission.toFixed(2);
       }
     }
   }

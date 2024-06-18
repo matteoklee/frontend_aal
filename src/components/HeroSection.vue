@@ -34,7 +34,7 @@
           <div class="h-[64px] w-[3px] bg-gray-800 absolute -end-[17px] top-[142px] rounded-e-lg"></div>
           <div class="rounded-[2rem] overflow-hidden w-[272px] h-[572px] bg-white dark:bg-gray-800">
             <!-- <img src="../assets/10.PNG" class="dark:hidden w-[272px] h-[572px]" alt=""> -->
-            <iframe src="http://localhost:8083/fhem?room=Unsorted" title="W3Schools Free Online Web Tutorials" class="w-[272px] h-[572px]"></iframe>
+            <iframe src="http://192.168.188.21:8083/fhem?room=Unsorted" title="W3Schools Free Online Web Tutorials" class="w-[272px] h-[572px]"></iframe>
           </div>
         </div>
       </div>
