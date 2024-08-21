@@ -11,8 +11,9 @@
           <li class="py-3 sm:py-4">
             <div class="flex items-center space-x-3 rtl:space-x-reverse">
               <div class="flex-shrink-0 text-red-500">
-                  <i class="fas fa-lightbulb-o fa-lg"></i>
-                  <font-awesome-icon :icon="['fas', 'lightbulb']" />
+                  <!-- <i class="fas fa-lightbulb-o fa-lg"></i>
+                  <font-awesome-icon :icon="['fas', 'lightbulb']" /> -->
+                  <font-awesome-icon icon="fa-arrow-right" class="text-black" />
               </div>
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-semibold text-gray-900 truncate dark:text-white">
@@ -117,7 +118,7 @@
               </div>
               <span v-if="emission !== null && emission !== '' && emission !== undefined" class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
 								<span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-								 {{ this.emission }} g/kwH
+								 {{ this.emission }} g/H
 							</span>
               <span v-else class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
 								<span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
